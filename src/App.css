@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.item {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 50%;
+  top: 30%;
+}
