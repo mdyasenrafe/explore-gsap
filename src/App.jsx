@@ -4,7 +4,6 @@ import { gsap } from "gsap";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-// import Swiper and modules styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -12,13 +11,13 @@ import { BiRefresh } from "react-icons/bi";
 
 const countryData = [
   {
-    country_name: "Norway",
-    country_images: [
+    countryName: "Norway",
+    countryImages: [
       "https://i.ibb.co/sJQ3B2w/image.png",
       "https://i.ibb.co/JK6YzdT/image.png",
       "https://i.ibb.co/Js6XdfT/image.png",
     ],
-    country_cities: [
+    countryCities: [
       "Oslo",
       "Bergen",
       "Trondheim",
@@ -36,13 +35,13 @@ const countryData = [
     ],
   },
   {
-    country_name: "Finland",
-    country_images: [
+    countryName: "Finland",
+    countryImages: [
       "https://i.ibb.co/9YFt36v/image.png",
       "https://i.ibb.co/H2FcDDt/image.png",
       "https://i.ibb.co/3mVDmN3/image.png",
     ],
-    country_cities: [
+    countryCities: [
       "Helsinki",
       "Turku",
       "Tampere",
@@ -66,12 +65,13 @@ function App() {
   const imageDivRef = useRef(null);
   const textDivRef = useRef(null);
 
-  const [selected, setSelected] = useState(0);
+  const [selectedCountry, setSelectedCountry] = useState(0);
 
   const offset = 30;
   useLayoutEffect(() => {
     const items = itemsRef.current;
-    // stacked cards
+
+    // Arrange stacked cards
     gsap.set(items, {
       x: (i) => i * offset,
       y: (i) => offset * i,
@@ -113,13 +113,11 @@ function App() {
   }, []);
 
   const handleChange = () => {
-    // when click on refresh button then change the selected country and reset the slider to first image and first city of that country and at first imaage will animate be shown  by bottom side
     const tl = gsap.timeline({
       paused: true,
       defaults: { duration: 0.8 },
     });
     const imageDiv = document.getElementById("imageDiv");
-    const textDiv = document.getElementById("textDiv");
 
     const items = itemsRef.current;
     items.forEach((item) => {
@@ -131,7 +129,7 @@ function App() {
       .to(textDivRef.current, {
         opacity: 0,
         onComplete: () => {
-          setSelected((prev) => (prev + 1) % countryData.length);
+          setSelectedCountry((prev) => (prev + 1) % countryData.length);
         },
       })
       .to(imageDivRef.current, { opacity: 1 })
@@ -141,7 +139,7 @@ function App() {
 
   return (
     <div className="flex container items-center mx-auto border border-[#e1e1e1] p-[24px] mt-[60px] rounded-[8px]">
-      <div className=" w-1/2">
+      <div className="w-1/2">
         <div className="flex justify-end">
           <BiRefresh
             onClick={handleChange}
@@ -150,9 +148,9 @@ function App() {
         </div>
         <div id="textDiv" ref={textDivRef}>
           <h1 className="text-[48px] font-bold mb-[24px]">
-            {countryData[selected].country_name}
+            {countryData[selectedCountry].countryName}
           </h1>
-          <p className="text-xl">time Duration</p>
+          <p className="text-xl">Time Duration</p>
           <p>
             <span className="text-[36px]">08</span>
             <span className="align-top text-[14px]">hrs</span>
@@ -172,7 +170,7 @@ function App() {
             keyboard={true}
             slidesPerView={2}
           >
-            {countryData[selected].country_cities.map((city, index) => (
+            {countryData[selectedCountry].countryCities.map((city, index) => (
               <SwiperSlide key={index}>
                 <div className="flex items-center">
                   <p className="text-[24px] font-bold">{city}</p>
@@ -188,7 +186,7 @@ function App() {
         ref={imageDivRef}
       >
         <div className="slider">
-          {countryData[selected].country_images.map((image, index) => (
+          {countryData[selectedCountry].countryImages.map((image, index) => (
             <img
               ref={(el) => (itemsRef.current[index] = el)}
               src={image}
